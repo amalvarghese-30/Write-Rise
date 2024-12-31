@@ -50,5 +50,10 @@ export const SERVICE_URLS = {
     newComment: { url: '/comment/new', method: 'POST' },
     getAllComments: { url: 'comments', method: 'GET', query: true },
     deleteComment: { url: 'comment/delete', method: 'DELETE', query: true },
-    updatePost: { url: 'update', method: 'PUT', query: true }
+    updatePost: { url: 'update', method: 'PUT', query: true },
+
+    getAdminPosts: { url: '/admin/posts', method: 'GET' },
+    deleteAdminPost: { url: '/admin/post', method: 'DELETE', query: true },
+    getAdminComments: { url: '/admin/comments', method: 'GET', query: true },
+    deleteAdminComment: { url: '/admin/comment', method: 'DELETE', query: true }
 }

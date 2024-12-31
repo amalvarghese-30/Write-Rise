@@ -6,8 +6,6 @@ import { API } from '../../service/api';
 import { DataContext } from '../../context/DataProvider';
 import loginImage from '../../images/logo1.png';
 
-
-
 const Component = styled(Box)`
     width: 600px;
     margin: 200px auto;
@@ -16,7 +14,7 @@ const Component = styled(Box)`
     border-radius: 40px;
     overflow: hidden;
     opacity: 0;
-    animation: fadeInComponent 0.5s 0.3s forwards; // Delayed fade-in for dramatic effect
+    animation: fadeInComponent 0.5s 0.3s forwards;
 
     @keyframes fadeInComponent {
         to {
@@ -25,45 +23,38 @@ const Component = styled(Box)`
     }
 `;
 
-
-
-
-
 const Image = styled('img')({
-    width: '80%',         // Reduced width to make the image visually smaller
-    height: 'auto',       // Maintain aspect ratio
-    objectFit: 'contain', // Ensures the image is fully visible and centered
+    width: '80%',
+    height: 'auto',
+    objectFit: 'contain',
     filter: 'grayscale(100%)',
     display: 'block',
-    margin: '10px auto 0', // Centers the image horizontally, margin-top is 10px
+    margin: '10px auto 0',
     marginBottom: '0',
-    borderBottom: 'none'
+    borderBottom: 'none',
 });
 
-
-// Adjust the Wrapper to ensure it fits well within the Component
 const Wrapper = styled(Box)`
     padding: 20px;
     display: flex;
     flex-direction: column;
-    background: #ffffff; // Ensure the background matches
+    background: #ffffff;
     & > div, & > button, & > p {
         margin-top: 20px;
     }
 `;
 
-// Buttons adjusted for better visual integration
 const LoginButton = styled(Button)`
     text-transform: none;
     background: #000000;
     color: #ffffff;
     height: 48px;
     border-radius: 8px;
-    transition: transform 0.3s ease; // Smooth transition for the transform property
+    transition: transform 0.3s ease;
 
     &:hover {
-        transform: scale(1.05); // Scales up the button to 105% of its size
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Optional: adds a shadow for more depth
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 `;
 
@@ -74,17 +65,13 @@ const SignupButton = styled(Button)`
     height: 48px;
     border-radius: 8px;
     border: 2px solid black;
-    transition: transform 0.3s ease; // Consistent transition for visual cohesion
+    transition: transform 0.3s ease;
 
     &:hover {
-        transform: scale(1.05); // Same scale effect for consistency
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Adds shadow for depth and visibility
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 `;
-
-
-
-
 
 const Text = styled(Typography)`
     color: #878787;
@@ -98,35 +85,12 @@ const Error = styled(Typography)`
     margin-top: 10px;
     font-weight: 600;
     opacity: 0;
-    animation: fadeIn 0.5s forwards; // Animation to fade in the error message
+    animation: fadeIn 0.5s forwards;
 
     @keyframes fadeIn {
         to {
             opacity: 1;
         }
-    }
-`;
-
-
-const StyledTextField = styled(TextField)`
-    & .MuiInput-underline:after {
-        border-bottom: 2px solid #000000; // Black underline
-    }
-
-    & .MuiInput-underline:before {
-        border-bottom: 1px solid #cccccc; // Default underline color
-    }
-
-    &:hover .MuiInput-underline:before {
-        border-bottom: 1px solid #333333; // Darken underline on hover
-    }
-
-    & .MuiInput-underline:hover:not(.Mui-disabled):before {
-        border-bottom: 2px solid #333333; // Thicker and darker underline on hover
-    }
-
-    & .Mui-focused .MuiInput-underline:after {
-        border-bottom: 2px solid #000000; // Keep black underline on focus
     }
 `;
 
@@ -136,12 +100,12 @@ const CenteredContainer = styled('div')`
     align-items: center;
     height: 100vh;
     width: 100vw;
-    padding-bottom:100px;
+    padding-bottom: 100px;
 `;
 
 const loginInitialValues = {
     username: '',
-    password: ''
+    password: '',
 };
 
 const signupInitialValues = {
@@ -159,11 +123,9 @@ const Login = ({ isUserAuthenticated }) => {
     const navigate = useNavigate();
     const { setAccount } = useContext(DataContext);
 
-    const imageURL = 'https://www.sesta.it/wp-content/uploads/2021/03/logo-blog-sesta-trasparente.png';
-
     useEffect(() => {
         showError(false);
-    }, [login])
+    }, [login]);
 
     useEffect(() => {
         document.body.style.height = '100%';
@@ -183,33 +145,34 @@ const Login = ({ isUserAuthenticated }) => {
         };
     }, []);
 
-
-
-
     const onValueChange = (e) => {
         setLogin({ ...login, [e.target.name]: e.target.value });
-    }
+    };
 
     const onInputChange = (e) => {
         setSignup({ ...signup, [e.target.name]: e.target.value });
-    }
+    };
 
     const loginUser = async () => {
         let response = await API.userLogin(login);
         if (response.isSuccess) {
-            showError('');
-
+            const user = response.data;
             sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
             setAccount({ name: response.data.name, username: response.data.username });
 
+            if (user.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/');
+            }
+
             isUserAuthenticated(true);
             setLogin(loginInitialValues);
-            navigate('/');
         } else {
             showError('Something went wrong! Please try again later.');
         }
-    }
+    };
 
     const signupUser = async () => {
         let response = await API.userSignup(signup);
@@ -220,38 +183,67 @@ const Login = ({ isUserAuthenticated }) => {
         } else {
             showError('Something went wrong! Please try again later.');
         }
-    }
+    };
 
     const toggleSignup = () => {
         account === 'signup' ? toggleAccount('login') : toggleAccount('signup');
-    }
+    };
 
     return (
         <CenteredContainer>
             <Component>
                 <Image src={loginImage} alt="blog" />
-                {
-                    account === 'login' ?
-                        <Wrapper>
-                            <TextField variant="standard" value={login.username} onChange={onValueChange} name='username' label='Enter Username' />
-                            <TextField variant="standard" value={login.password} onChange={onValueChange} name='password' label='Enter Password' />
-                            {error && <Error>{error}</Error>}
-                            <LoginButton onClick={loginUser} >Login</LoginButton>
-                            <Text style={{ textAlign: 'center' }}>OR</Text>
-                            <SignupButton onClick={toggleSignup} style={{ marginBottom: 50 }}>Create an account</SignupButton>
-                        </Wrapper> :
-                        <Wrapper>
-                            <TextField variant="standard" onChange={onInputChange} name='name' label='Enter Name' />
-                            <TextField variant="standard" onChange={onInputChange} name='username' label='Enter Username' />
-                            <TextField variant="standard" onChange={onInputChange} name='password' label='Enter Password' />
-                            <SignupButton onClick={signupUser} >Signup</SignupButton>
-                            <Text style={{ textAlign: 'center' }}>OR</Text>
-                            <LoginButton onClick={toggleSignup}>Already have an account</LoginButton>
-                        </Wrapper>
-                }
+                {account === 'login' ? (
+                    <Wrapper>
+                        <TextField
+                            variant="standard"
+                            value={login.username}
+                            onChange={onValueChange}
+                            name="username"
+                            label="Enter Username"
+                        />
+                        <TextField
+                            variant="standard"
+                            value={login.password}
+                            onChange={onValueChange}
+                            name="password"
+                            label="Enter Password"
+                        />
+                        {error && <Error>{error}</Error>}
+                        <LoginButton onClick={loginUser}>Login</LoginButton>
+                        <Text style={{ textAlign: 'center' }}>OR</Text>
+                        <SignupButton onClick={toggleSignup} style={{ marginBottom: 50 }}>
+                            Create an account
+                        </SignupButton>
+                    </Wrapper>
+                ) : (
+                    <Wrapper>
+                        <TextField
+                            variant="standard"
+                            onChange={onInputChange}
+                            name="name"
+                            label="Enter Name"
+                        />
+                        <TextField
+                            variant="standard"
+                            onChange={onInputChange}
+                            name="username"
+                            label="Enter Username"
+                        />
+                        <TextField
+                            variant="standard"
+                            onChange={onInputChange}
+                            name="password"
+                            label="Enter Password"
+                        />
+                        <SignupButton onClick={signupUser}>Signup</SignupButton>
+                        <Text style={{ textAlign: 'center' }}>OR</Text>
+                        <LoginButton onClick={toggleSignup}>Already have an account</LoginButton>
+                    </Wrapper>
+                )}
             </Component>
         </CenteredContainer>
-    )
-}
+    );
+};
 
 export default Login;

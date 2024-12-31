@@ -1,6 +1,6 @@
 import express from 'express';
 
-
+import { isAdmin } from '../controller/jwt-controller.js';
 import { createPost, updatePost, deletePost, getPost, getAllPosts } from '../controller/post-controller.js';
 import { uploadImage, getImage } from '../controller/image-controller.js';
 import upload from '../utils/upload.js'
@@ -30,6 +30,13 @@ router.get('/file/:filename', getImage);
 router.post('/comment/new', authenticateToken, newComment);
 router.get('/comments/:id', authenticateToken, getComments);
 router.delete('/comment/delete/:id', authenticateToken, deleteComment);
+
+router.get('/admin/posts', authenticateToken, isAdmin, getAllPosts);
+router.delete('/admin/post/:id', authenticateToken, isAdmin, deletePost);
+
+router.get('/admin/comments/:postId', authenticateToken, isAdmin, getComments);
+router.delete('/admin/comment/:id', authenticateToken, isAdmin, deleteComment);
+
 
 
 export default router;

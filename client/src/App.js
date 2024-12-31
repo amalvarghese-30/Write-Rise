@@ -13,6 +13,7 @@ import Update from './components/create/Update';
 import About from './components/about/About';
 import Contact from './components/contact/Contact';
 import Login from './components/account/Login';
+import AdminDashboard from './components/admin/AdminDashboard';
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
   const token = sessionStorage.getItem('accessToken');
@@ -53,6 +54,11 @@ function App() {
             <Route path='/about' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
               <Route path='/about' element={<About />} />
             </Route>
+
+            <Route path='/admin/dashboard' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+              <Route path='/admin/dashboard' element={<AdminDashboard />} />
+            </Route>
+
 
             <Route path='/contact' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
               <Route path='/contact' element={<Contact />} />

@@ -47,3 +47,12 @@ export const createNewToken = async (request, response) => {
 
 
 }
+
+export const isAdmin = (request, response, next) => {
+    const { user } = request;
+    if (user && user.role === 'admin') {
+        next();
+    } else {
+        return response.status(403).json({ msg: 'Access denied. Admins only.' });
+    }
+};

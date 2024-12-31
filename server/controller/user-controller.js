@@ -34,21 +34,34 @@ export const loginUser = async (request, response) => {
     try {
         let match = await bcrypt.compare(request.body.password, user.password);
         if (match) {
-            const accessToken = jwt.sign(user.toJSON(), process.env.ACCESS_SECRET_KEY, { expiresIn: '15m' });
-            const refreshToken = jwt.sign(user.toJSON(), process.env.REFRESH_SECRET_KEY);
+            const accessToken = jwt.sign(
+                { id: user._id, username: user.username, role: user.role }, // Include role
+                process.env.ACCESS_SECRET_KEY,
+                { expiresIn: '15m' }
+            );
+            const refreshToken = jwt.sign(
+                { id: user._id, username: user.username, role: user.role }, // Include role
+                process.env.REFRESH_SECRET_KEY
+            );
 
             const newToken = new Token({ token: refreshToken });
             await newToken.save();
 
-            response.status(200).json({ accessToken: accessToken, refreshToken: refreshToken, name: user.name, username: user.username });
-
+            response.status(200).json({
+                accessToken,
+                refreshToken,
+                name: user.name,
+                username: user.username,
+                role: user.role // Include role in the response
+            });
         } else {
-            response.status(400).json({ msg: 'Password does not match' })
+            response.status(400).json({ msg: 'Password does not match' });
         }
     } catch (error) {
-        response.status(500).json({ msg: 'error while login the user' })
+        response.status(500).json({ msg: 'Error while logging in the user' });
     }
-}
+};
+
 
 export const logoutUser = async (request, response) => {
     const token = request.body.token;
