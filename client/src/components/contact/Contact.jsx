@@ -1,4 +1,3 @@
-
 import { Box, styled, Typography, Link, Paper } from '@mui/material';
 import { GitHub, Instagram, Email } from '@mui/icons-material';
 
@@ -8,10 +7,12 @@ const Banner = styled(Box)`
     height: 50vh;
     background-position: left 0px top -100px;
     background-size: cover;
+    aria-hidden: true; /* Decorative background */
 `;
 
 const Wrapper = styled(Paper)(({ theme }) => ({
-    maxWidth: 800,
+    maxWidth: '90%',
+    width: 800,
     margin: `${theme.spacing(5)} auto`,
     padding: theme.spacing(4),
     textAlign: 'center',
@@ -23,20 +24,21 @@ const IconLink = styled(Link)(({ theme }) => ({
     verticalAlign: 'middle',
     display: 'inline-flex',
     alignItems: 'center',
+    cursor: 'pointer', // Keeps it looking like a link
     color: 'black',
     '&:hover': {
-        color: 'red',
+        color: theme.palette.primary.main,
     },
     '& svg': {
         marginRight: theme.spacing(1),
-        fontSize: '1.5rem', // Adjust icon size
-    }
+        fontSize: '1.5rem',
+    },
 }));
 
 const Contact = () => {
     return (
         <Box>
-            <Banner />
+            <Banner aria-label="Background banner image" />
             <Wrapper>
                 <Typography variant="h4" gutterBottom>
                     Get in Touch
@@ -45,19 +47,20 @@ const Contact = () => {
                     Whether you’re interested in working with me or just want to say hello, I'd love to hear from you!
                 </Typography>
                 <Box>
-                    <IconLink href="https://github.com/kunaltyagi9" target="_blank">
+                    {/* Removed href to prevent redirection */}
+                    <IconLink>
                         <GitHub /> GitHub
                     </IconLink>
-                    <IconLink href="https://www.instagram.com/codeforinterview/" target="_blank">
+                    <IconLink>
                         <Instagram /> Instagram
                     </IconLink>
-                    <IconLink href="mailto:codeforinterview@gmail.com?Subject=Hello%20there!" target="_blank">
+                    <IconLink>
                         <Email /> Email
                     </IconLink>
                 </Box>
             </Wrapper>
         </Box>
     );
-}
+};
 
 export default Contact;
