@@ -3,6 +3,11 @@ import Post from '../model/post.js';
 
 export const createPost = async (req, res) => {
     try {
+        // Ensure only the filename is saved
+        if (req.body.picture) {
+            req.body.picture = req.body.picture.replace(/^.*\/file\//, '');
+        }
+
         const post = new Post(req.body);
         await post.save();
         res.status(200).json('Post saved successfully');
@@ -11,6 +16,7 @@ export const createPost = async (req, res) => {
         res.status(500).json({ msg: error.message });
     }
 };
+
 
 export const updatePost = async (req, res) => {
     try {
