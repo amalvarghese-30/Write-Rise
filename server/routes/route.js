@@ -36,6 +36,11 @@ router.delete('/admin/post/:id', authenticateToken, isAdmin, deletePost);
 
 router.get('/admin/comments/:postId', authenticateToken, isAdmin, getComments);
 router.delete('/admin/comment/:id', authenticateToken, isAdmin, deleteComment);
+router.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({ error: 'Something went wrong!' });
+});
+
 
 
 
