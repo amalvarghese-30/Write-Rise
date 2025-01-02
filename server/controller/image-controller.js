@@ -25,9 +25,14 @@ export const uploadImage = (req, res) => {
 
     console.log('File details:', req.file); // Debug log for the uploaded file
 
-    const imageUrl = `${url}/file/${req.file.filename}`;
-    return res.status(200).json(imageUrl);
+    // Ensure the filename does not include extra paths or URLs
+    const filename = req.file.filename;
+
+    // Generate the correct image URL
+    const imageUrl = `${url}/file/${filename}`;
+    return res.status(200).json({ imageUrl });
 };
+
 
 
 
