@@ -12,11 +12,8 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-    origin: ['https://write-rise-frontend.onrender.com'], // Replace with your actual frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
+
 
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
