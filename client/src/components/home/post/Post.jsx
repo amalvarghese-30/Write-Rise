@@ -1,6 +1,5 @@
 import { styled, Box, Typography } from '@mui/material';
 
-// Styled components
 const Container = styled(Box)`
     border: 1px solid #d3cede;
     border-radius: 10px;
@@ -9,15 +8,15 @@ const Container = styled(Box)`
     align-items: center;
     flex-direction: column;
     height: 350px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transition */
     & > img, & > p {
         padding: 0 5px 5px 5px;
     }
 
     &:hover {
-        transform: scale(1.05);
-        box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
-        cursor: pointer;
+        transform: scale(1.05); /* Add popping effect */
+        box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+        cursor: pointer; /* Change cursor on hover */
     }
 `;
 
@@ -25,7 +24,7 @@ const Image = styled('img')({
     width: '100%',
     objectFit: 'cover',
     borderRadius: '10px 10px 0 0',
-    height: 150,
+    height: 150
 });
 
 const Text = styled(Typography)`
@@ -44,15 +43,11 @@ const Details = styled(Typography)`
 `;
 
 const Post = ({ post }) => {
-    // Construct the image URL using the filename returned from the backend
-    const url = post.picture 
-        ? `https://your-backend-url.com/file/${post.picture}` 
-        : 'https://via.placeholder.com/150'; // Fallback placeholder image
+    const url = post.picture ? post.picture : 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=752&q=80';
 
-    // Utility function to truncate long text
     const addEllipsis = (str, limit) => {
         return str.length > limit ? str.substring(0, limit) + '...' : str;
-    };
+    }
 
     return (
         <Container>
