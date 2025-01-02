@@ -36,10 +36,10 @@ export const uploadImage = (req, res) => {
 
 
 
-
 export const getImage = async (request, response) => {
     try {
-        const file = await gfs.files.findOne({ filename: request.params.filename });
+        const filename = request.params.filename; // Expect just the filename
+        const file = await gfs.files.findOne({ filename });
 
         if (!file) {
             return response.status(404).json({ msg: 'File not found' });
@@ -47,7 +47,7 @@ export const getImage = async (request, response) => {
 
         // Set the Content-Type and CORS headers
         response.set('Content-Type', file.contentType);
-        response.set('Access-Control-Allow-Origin', 'https://write-rise-frontend.onrender.com');
+        response.set('Access-Control-Allow-Origin', '*');
 
         const readStream = gridfsBucket.openDownloadStream(file._id);
         readStream.pipe(response);
