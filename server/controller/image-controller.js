@@ -1,5 +1,6 @@
-import grid from 'gridfs-stream'
+import grid from 'gridfs-stream';
 import mongoose from 'mongoose';
+import path from 'path';
 
 const url = process.env.BASE_URL || 'http://localhost:8000';
 
@@ -16,17 +17,16 @@ conn.once('open', () => {
 
 });
 
-
 export const uploadImage = (req, res) => {
     if (!req.file) {
         console.error('No file uploaded:', req.file);
         return res.status(404).json({ msg: 'File not found' });
     }
 
-    console.log('File details:', req.file); // Debug log for the uploaded file
+    // Ensure only the filename is extracted
+    const filename = path.basename(req.file.filename);
 
-    // Ensure the filename does not include extra paths or URLs
-    const filename = req.file.filename;
+    console.log('Sanitized Filename:', filename); // Debug log to confirm sanitization
 
     // Generate the correct image URL
     const imageUrl = `${url}/file/${filename}`;
