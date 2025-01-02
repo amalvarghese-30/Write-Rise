@@ -1,8 +1,9 @@
 import { Box, styled, Typography, Link, Paper } from '@mui/material';
 import { GitHub, Instagram, Email } from '@mui/icons-material';
+import contactimg from './bg2.jpg'; // Import the image properly
 
 const Banner = styled(Box)`
-     background-image: url('/bg2.jpg');
+    background-image: url(${contactimg}); // Correct way to use the imported image
     width: 100%;
     height: 50vh;
     background-position: left 0px top -100px;
