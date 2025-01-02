@@ -44,9 +44,9 @@ const Details = styled(Typography)`
 
 const Post = ({ post }) => {
     // Dynamically construct the image URL
-    const url = post.picture
-        ? `https://write-rise.onrender.com/file/${post.picture}` // Backend URL for GridFS images
-        : 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=752&q=80'; // Fallback image for missing posts
+    const url = post.picture?.startsWith('http')
+        ? post.picture // Use the full URL directly if `post.picture` already contains it
+        : `https://write-rise.onrender.com/file/${post.picture}`; // Construct URL using the backend base URL
 
     // Helper function to truncate long text
     const addEllipsis = (str, limit) => {
@@ -63,5 +63,6 @@ const Post = ({ post }) => {
         </Container>
     );
 };
+
 
 export default Post;
