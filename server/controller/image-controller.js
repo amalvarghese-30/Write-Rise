@@ -33,17 +33,19 @@ export const uploadImage = (req, res) => {
 
 
 
-
 export const getImage = async (request, response) => {
     try {
         const file = await gfs.files.findOne({ filename: request.params.filename });
-        // if (!file) {
-        //     return response.status(404).json({ msg: "File not found" });
-        // }
+
+        if (!file) {
+            return response.status(404).json({ msg: 'File not found' });
+        }
+
+        // Set CORS and Content-Type headers
+        response.set('Access-Control-Allow-Origin', 'https://write-rise-frontend.onrender.com'); // Frontend domain
+        response.set('Content-Type', file.contentType);
 
         const readStream = gridfsBucket.openDownloadStream(file._id);
-        // Set the correct Content-Type header for the file
-        // response.set('Content-Type', file.contentType);
         readStream.pipe(response);
     } catch (error) {
         response.status(500).json({ msg: error.message });
