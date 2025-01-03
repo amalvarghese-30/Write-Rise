@@ -19,39 +19,29 @@ conn.once('open', () => {
 // Upload image
 export const uploadImage = (req, res) => {
     if (!req.file) {
-        console.error('No file uploaded:', req.file);
         return res.status(404).json({ msg: 'File not found' });
     }
 
-    const filename = path.basename(req.file.filename);
-    console.log('Sanitized Filename:', filename); // Debug log
-
     const baseUrl = process.env.BASE_URL || 'http://localhost:8000';
-    const imageUrl = `${baseUrl}/file/${filename}`;
+    const imageUrl = `${baseUrl}/file/${req.file.filename}`; // Correct construction
     return res.status(200).json({ imageUrl });
 };
 
 // Retrieve image
-export const getImage = async (request, response) => {
+export const getImage = async (req, res) => {
     try {
-        const filename = request.params.filename;
-        console.log('Requested filename:', filename); // Debug log
+        const filename = req.params.filename;
 
         const file = await gfs.files.findOne({ filename });
         if (!file) {
-            console.error('File not found:', filename);
-            return response.status(404).json({ msg: 'File not found' });
+            return res.status(404).json({ msg: 'File not found' });
         }
 
-        console.log('File metadata:', file); // Debug log
-
-        response.set('Content-Type', file.contentType);
-        response.set('Access-Control-Allow-Origin', '*');
-
         const readStream = gridfsBucket.openDownloadStream(file._id);
-        readStream.pipe(response);
+        res.set('Content-Type', file.contentType);
+        readStream.pipe(res);
     } catch (error) {
-        console.error('Error retrieving file:', error.message);
-        response.status(500).json({ msg: error.message });
+        res.status(500).json({ msg: error.message });
     }
 };
+
