@@ -83,18 +83,5 @@ export const getAllPosts = async (req, res) => {
 };
 
 
-export const getAllPosts = async (req, res) => {
-    try {
-        let posts = await Post.find();
-        posts = posts.map((post) => {
-            if (post.picture) {
-                post.picture = `${process.env.BASE_URL}/file/${post.picture}`;
-            }
-            return post;
-        });
-        res.status(200).json(posts);
-    } catch (error) {
-        res.status(500).json({ msg: error.message });
-    }
-};
+
 
