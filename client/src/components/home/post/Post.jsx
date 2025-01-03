@@ -44,9 +44,7 @@ const Details = styled(Typography)`
 
 const Post = ({ post }) => {
     // Dynamically construct the image URL
-    const url = post.picture?.startsWith('http')
-        ? post.picture // Use the full URL directly if `post.picture` already contains it
-        : `https://write-rise.onrender.com/file/${post.picture}`; // Construct URL using the backend base URL
+   const url = post.picture || 'https://via.placeholder.com/150';
 
     // Helper function to truncate long text
     const addEllipsis = (str, limit) => {
