@@ -107,10 +107,12 @@ const DetailView = () => {
         }
     };
 
+const url = post.picture || 'https://via.placeholder.com/150';
+
     return (
 
         <Container elevation={4}>
-            <Image src={post.picture || url} alt="post" />
+              <Image src={url} alt="post" />
             <ActionIcons>
                 {account.username === post.username && (
                     <>
